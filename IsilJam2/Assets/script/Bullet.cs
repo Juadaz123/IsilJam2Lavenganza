@@ -3,19 +3,22 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 
 {
-    private ScoreController score;
-    [SerializeField] private GameObject bullet;
-    private float velocity = 0f;
-    Rigidbody2D rb;
 
-    private void Start()
+    private Rigidbody2D rb;
+
+
+    public void Fire(float v)
     {
-        rb = GetComponent<Rigidbody2D>();
-        score = GameObject.Find("ScoreController").GetComponent<ScoreController>();
+
+        rb = gameObject.GetComponent<Rigidbody2D>();
+        rb.AddForce(transform.up * v * 2, ForceMode2D.Impulse);
+        print("FIRE");
     }
-    void Update()
+
+    void OnBecameInvisible()
     {
-        rb.AddForce(Vector2.up * velocity * Time.deltaTime);
+        print("Se destruyo");
+        Destroy(gameObject);
     }
 
 
