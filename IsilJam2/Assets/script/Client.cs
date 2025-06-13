@@ -26,7 +26,7 @@ public class Client : MonoBehaviour
 
     void OnBecameInvisible()
     {
-        print("Se destruyo");
+    
         Destroy(gameObject);
     }
 }
