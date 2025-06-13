@@ -2,16 +2,18 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] private GameObject bullet;
-    private float velocity = 0f;
-    Rigidbody2D rb;
+    private Rigidbody2D rb;
 
-    private void Start()
+    public void Fire(float v)
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb = gameObject.GetComponent<Rigidbody2D>();
+        rb.AddForce(transform.up * v * 2, ForceMode2D.Impulse);
+        print("FIRE");
     }
-    void Update()
+
+    void OnBecameInvisible()
     {
-        rb.AddForce(Vector2.up * velocity * Time.deltaTime);
+        print("Se destruyo");
+        Destroy(gameObject);
     }
 }
