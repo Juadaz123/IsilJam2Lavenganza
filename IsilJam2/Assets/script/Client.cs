@@ -4,7 +4,13 @@ using UnityEngine;
 
 public class Client : MonoBehaviour
 {
+    private ScoreController score;
     private float velocity;
+
+    private void Start()
+    {
+        score = GameObject.Find("ScoreController").GetComponent<ScoreController>();
+    }
 
     public void SetVelocity(float v)
     {
@@ -29,4 +35,19 @@ public class Client : MonoBehaviour
     
         Destroy(gameObject);
     }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag(score.tagPlayer1Goal))
+        {
+            score.ActulizarPuntaje1();
+        }
+        else if (collision.gameObject.CompareTag(score.tagPlayer2Goal))
+        {
+            score.ActulizarPuntaje2();
+        }
+    }
+
+
+
 }

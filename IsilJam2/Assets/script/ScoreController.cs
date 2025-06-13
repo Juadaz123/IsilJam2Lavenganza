@@ -9,9 +9,9 @@ public class ScoreController : MonoBehaviour
     public int scorePlayer2 = 0;
 
     [SerializeField]
-    private string tagPlayer1Goal = "GoalPlayer1";
+    public string tagPlayer1Goal = "GoalPlayer1";
     [SerializeField]
-    private string tagPlayer2Goal = "GoalPlayer2";
+    public string tagPlayer2Goal = "GoalPlayer2";
 
     [SerializeField]
     private TMP_Text scoreText1;
@@ -32,21 +32,6 @@ public class ScoreController : MonoBehaviour
         UpdateScoreUI();
     }
 
-    public void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag(tagPlayer1Goal))
-        {
-            scorePlayer1++;
-            Debug.Log("Punto para el Jugador 1! Puntuación: " + scorePlayer1);
-            UpdateScoreUI();
-        }
-        else if (collision.gameObject.CompareTag(tagPlayer2Goal))
-        {
-            scorePlayer2++;
-            Debug.Log("Punto para el Jugador 2! Puntuación: " + scorePlayer2);
-            UpdateScoreUI();
-        }
-    }
 
     void UpdateScoreUI()
     {
@@ -58,5 +43,17 @@ public class ScoreController : MonoBehaviour
         {
             scoreText2.text = scorePlayer2.ToString();
         }
+    }
+    public void ActulizarPuntaje1(){
+        scorePlayer1++;
+        Debug.Log("Punto para el Jugador 1! Puntuación: " + scorePlayer1);
+        UpdateScoreUI();
+    }
+
+    public void ActulizarPuntaje2()
+    {
+        scorePlayer2++;
+        Debug.Log("Punto para el Jugador 2! Puntuación: " + scorePlayer2);
+        UpdateScoreUI();
     }
 }
