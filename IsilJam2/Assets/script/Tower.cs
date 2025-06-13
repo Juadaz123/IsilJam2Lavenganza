@@ -1,11 +1,9 @@
-using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
-
 public class Tower : MonoBehaviour
 {
     [SerializeField] private KeyCode keyUP;
     [SerializeField] private KeyCode keyDown;
     [SerializeField] private KeyCode keyForce;
+    [SerializeField] private GameObject bullet;
 
     //refererncia del objeto
     private Transform TowerTransform;
@@ -31,14 +29,8 @@ public class Tower : MonoBehaviour
         _angleToShooting = Mathf.Clamp(_angleToShooting, 0f, 90f);
         directionUp();
         directionDown();
-
-
         ExecuteForce();
-
         TowerTransform.localEulerAngles = new Vector3(0, 0, _angleToShooting);
-
-
-        
     }
 
     private void directionUp()
@@ -64,14 +56,22 @@ public class Tower : MonoBehaviour
     {
         ShootForce = 0f;
         float target = 10; // Valor final
-        float lerpTime = 0; // Factor de interpolación
-        float duration = 5f; // Duración de la interpolación
+        float lerpTime = 0; // Factor de interpolaciï¿½n
+        float duration = 5f; // Duraciï¿½n de la interpolaciï¿½n
 
-        // Actualizar el factor de interpolación en cada frame
+        // Actualizar el factor de interpolaciï¿½n en cada frame
         lerpTime += Time.deltaTime / duration;
 
-        if(Input.GetKey(keyForce))
-        ShootForce = Mathf.Lerp(ShootForce, 20, lerpTime);
+        if (Input.GetKey(keyForce))
+        {
+            ShootForce = Mathf.Lerp(ShootForce, 20, lerpTime);
+            GameObject clone = Instantiate(bullet, transform.position, Quaternion.identity);
+
+            if (clone.TryGetComponent<Client>(out var mover))
+            {
+                mover.SetVelocity(ShootForce);
+            }
+        }
 
         // (Opcional) Asegurar que se alcance el valor final
         if (lerpTime >= 1)
