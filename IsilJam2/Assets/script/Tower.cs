@@ -10,15 +10,15 @@ public class Tower : MonoBehaviour
     //refererncia del objeto
     private Transform TowerTransform;
 
-    //declaran
-    [Range(0f, 90f)]
     private float _angleToShooting;
+    [SerializeField] private float minAngle;
+    [SerializeField] private float maxAngle;
 
     //Force
     private float ShootForce = 0f;
-    private float target = 10; // Valor final
-    private float lerpTime = 0; // Factor de interpolaci�n
-    private float duration = 5f; // Duraci�n de la interpolaci�n
+    private float lerpTime = 0f;
+    private float duration = 1.5f;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -33,11 +33,12 @@ public class Tower : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _angleToShooting = Mathf.Clamp(_angleToShooting, 0f, 90f);
+        _angleToShooting = Mathf.Clamp(_angleToShooting, minAngle, maxAngle);
         directionUp();
         directionDown();
         ExecuteForce();
-        TowerTransform.localEulerAngles = new Vector3(0, 0, _angleToShooting);
+        ThrowShot();
+        TowerTransform.localEulerAngles = new Vector3(0, transform.rotation.y,_angleToShooting);
     }
 
     private void directionUp()
@@ -61,26 +62,28 @@ public class Tower : MonoBehaviour
 
     private void ExecuteForce()
     {
-        // Actualizar el factor de interpolaci�n en cada frame
-        if (Input.GetKey(keyForce) && ShootForce < 10)
+        if (Input.GetKey(keyForce))
         {
             lerpTime += Time.deltaTime / duration;
-            ShootForce = Mathf.Lerp(ShootForce, 20, lerpTime);
+            ShootForce = Mathf.Lerp(5f, 10f, lerpTime);
         }
     }
 
+
     public void ThrowShot()
     {
-        if(Input.GetKeyUp(keyForce))
+        if (Input.GetKeyUp(keyForce))
         {
-            GameObject clone = Instantiate(bullet, transform.position, Quaternion.identity);
+            GameObject clone = Instantiate(bullet, transform.position, transform.rotation);
 
-            if (clone.TryGetComponent<Client>(out var mover))
+            if (clone.TryGetComponent<Bullet>(out var mover))
             {
-                mover.SetVelocity(ShootForce);
+                mover.Fire(ShootForce);
             }
 
+            // Reiniciar fuerza y tiempo
             ShootForce = 0f;
+            lerpTime = 0f;
         }
     }
 }
