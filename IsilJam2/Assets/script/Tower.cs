@@ -37,7 +37,6 @@ public class Tower : MonoBehaviour
         directionUp();
         directionDown();
         ExecuteForce();
-        ThrowShot();
         TowerTransform.localEulerAngles = new Vector3(0, 0, _angleToShooting);
     }
 
