@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class Tower : MonoBehaviour
 {
     [SerializeField] private KeyCode keyUP;
@@ -11,13 +13,18 @@ public class Tower : MonoBehaviour
     //declaran
     [Range(0f, 90f)]
     private float _angleToShooting;
-  
-    private float ShootForce;
+
+    //Force
+    private float ShootForce = 0f;
+    private float target = 10; // Valor final
+    private float lerpTime = 0; // Factor de interpolaci�n
+    private float duration = 5f; // Duraci�n de la interpolaci�n
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         TowerTransform = gameObject.transform;
-        if(TowerTransform == null)
+        if (TowerTransform == null)
         {
             Debug.Log("Se obtiene el tranform correctamente");
         }
@@ -54,37 +61,26 @@ public class Tower : MonoBehaviour
 
     private void ExecuteForce()
     {
-        ShootForce = 0f;
-        float target = 10; // Valor final
-        float lerpTime = 0; // Factor de interpolaci�n
-        float duration = 5f; // Duraci�n de la interpolaci�n
-
         // Actualizar el factor de interpolaci�n en cada frame
-        lerpTime += Time.deltaTime / duration;
-
-        if (Input.GetKey(keyForce))
+        if (Input.GetKey(keyForce) && ShootForce < 10)
         {
+            lerpTime += Time.deltaTime / duration;
             ShootForce = Mathf.Lerp(ShootForce, 20, lerpTime);
+        }
+    }
+
+    public void ThrowShot()
+    {
+        if(Input.GetKeyUp(keyForce))
+        {
             GameObject clone = Instantiate(bullet, transform.position, Quaternion.identity);
 
             if (clone.TryGetComponent<Client>(out var mover))
             {
                 mover.SetVelocity(ShootForce);
             }
-        }
 
-        // (Opcional) Asegurar que se alcance el valor final
-        if (lerpTime >= 1)
-        {
-            ShootForce = target;
-        }
-
-        if(Input.GetKeyUp(keyForce))
-        {
-            //disparar la bala
             ShootForce = 0f;
-                Debug.Log(ShootForce + "dime valor");
         }
     }
-
 }
