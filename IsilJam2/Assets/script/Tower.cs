@@ -37,6 +37,7 @@ public class Tower : MonoBehaviour
         directionUp();
         directionDown();
         ExecuteForce();
+        ThrowShot();
         TowerTransform.localEulerAngles = new Vector3(0, 0, _angleToShooting);
     }
 
@@ -71,7 +72,7 @@ public class Tower : MonoBehaviour
 
     public void ThrowShot()
     {
-        if (Input.GetKeyUp(keyForce))
+        if(Input.GetKeyUp(keyForce))
         {
             GameObject clone = Instantiate(bullet, transform.position, Quaternion.identity);
 
